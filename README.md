@@ -1,4 +1,6 @@
-> [!NOTE] For usage with CRISP:
+
+> [!NOTE]
+> For usage with CRISP:
 >
 > 1. Set up the Franka Desk credentials using Nano (assuming you are in the folder containing this README):
 > 
