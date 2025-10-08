@@ -20,6 +20,7 @@ setup(
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),
+        ("share/" + package_name + "/launch", ["launch/button_to_record_msg.launch.py"]),
     ],
     install_requires=[
         "setuptools",
@@ -30,6 +31,7 @@ setup(
     entry_points={
         "console_scripts": [
             "franka_pilot_buttons = franka_buttons.franka_pilot_buttons:main",
+            "franka_buttons_to_record = franka_buttons.franka_buttons_to_record:main",
         ],
     },
     zip_safe=True,
