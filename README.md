@@ -1,3 +1,21 @@
+> [!NOTE] For usage with CRISP:
+>
+> 1. Set up the Franka Desk credentials using Nano (assuming you are in the folder containing this README):
+> 
+> ```bash
+> cp -i .env.template .env
+> nano .env
+> ```
+> 
+> 2. Build and start the Docker container:
+> 
+> ```bash
+> docker compose up franka_buttons
+> ```
+>
+
+---
+
 # Read franka buttons in ROS
 
 Read the Pilot Buttons on a Franka robot arm.
