@@ -5,8 +5,10 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    robot_ip = LaunchConfiguration("robot_ip", default="172.16.1.2")
-    launch_arguments = [DeclareLaunchArgument("robot_ip", default_value="172.16.1.2")]
+    robot_ip = LaunchConfiguration("robot_ip", default="")
+    namespace = LaunchConfiguration("namespace", default="")
+    launch_arguments = [DeclareLaunchArgument("robot_ip", default_value=""),
+                        DeclareLaunchArgument("namespace", default_value="")]
 
     return launch.LaunchDescription(
         [
@@ -14,6 +16,7 @@ def generate_launch_description():
             Node(
                 package="franka_buttons",
                 executable="franka_pilot_buttons",
+                namespace=namespace,
                 parameters=[
                     {
                         "hostname": robot_ip,
@@ -26,6 +29,7 @@ def generate_launch_description():
                 package="franka_buttons",
                 name="franka_buttons_to_record",
                 executable="franka_buttons_to_record",
+                namespace=namespace,
             ),
         ],
     )

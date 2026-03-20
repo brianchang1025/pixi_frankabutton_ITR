@@ -3,6 +3,17 @@ __pycache__
 # Secrets are stored in .env files
 .env*
 
+# pixi environments
+.pixi
+.pixi/*
+!.pixi/config.toml
+
+# ROS2 build artifacts
+build/
+install/
+log/
+
+
 # Specifically allow the .env file template and example
 !.env.template
 !.env.example

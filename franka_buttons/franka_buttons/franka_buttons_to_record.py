@@ -4,9 +4,8 @@ import rclpy
 from rclpy.node import Node
 
 from franka_buttons_interfaces.msg import FrankaPilotButtonEvent
-from std_msgs.msg import String
-
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Bool, String
 
 
 class ButtonToRecordMessage(Node):
@@ -23,8 +22,10 @@ class ButtonToRecordMessage(Node):
         )
 
         self.publisher = self.create_publisher(String, "record_transition", 10)
-        self.gripper_pub = self.create_publisher(JointState, "/left/trigger/trigger_state_broadcaster/joint_states", 10)
+        self.right_publisher = self.create_publisher(Bool, "franka_buttons/right", 10)
+        self.gripper_pub = self.create_publisher(JointState, "trigger/trigger_state_broadcaster/joint_states", 10)
         self.create_timer(1.0 / 50.0, callback=self.publish_gripper_state)
+        
 
         # Add a cooldown to avoid multiple toggles
         self._last_toggle = self.get_clock().now()
@@ -40,11 +41,16 @@ class ButtonToRecordMessage(Node):
         msg.effort = [0.0]
         self.gripper_pub.publish(msg)
 
+    def publish_check_false(self):
+        self.check_publisher.publish(Bool(data=False))
+
     def button_callback(self, msg: FrankaPilotButtonEvent):
         """Callback function for the button event.
 
         If circle pressed, then pass the command to the gripper client to toggle the gripper.
         """
+        
+
         if (self.get_clock().now() - self._last_toggle).nanoseconds < self._cooldown * 1e9:
             return
 
@@ -64,6 +70,9 @@ class ButtonToRecordMessage(Node):
             if msg.pressed[0] == "down":
                 self.get_logger().info("Down button pressed. Sending a gripper toggle command.")
                 self.gripper_state = 1.0 - self.gripper_state
+            if msg.pressed[0] == "right":
+                self.get_logger().info("Right button pressed. Sending a check command.")
+                self.right_publisher.publish(Bool(data=True))
 
             self._last_toggle = self.get_clock().now()
 
